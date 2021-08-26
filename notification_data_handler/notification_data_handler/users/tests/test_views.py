@@ -78,7 +78,7 @@ class TestUserRedirectView:
 
         view.request = request
 
-        assert view.get_redirect_url() == f"api/v1/users/{user.username}/"
+        assert view.get_redirect_url() == f"/api/v1/users/{user.username}/"
 
 
 class TestUserDetailView:
