@@ -8,6 +8,9 @@ Exposes API to the client to send notifications.
 ### Kafka Settings
 
 - In `notification_gateway/config/settings/base.py` set `BOOTSTRAP_SERVERS` based on your `kafka-docker` settings.
+
+### Django Settings
+
 - In `notification_gateway/local.yml` change the `django` port based on your needs **(optional)**.
 
 ## Requests
