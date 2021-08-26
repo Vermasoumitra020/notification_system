@@ -12,6 +12,10 @@ class InstanceHandlerStrategy(ABC):
 
 
 class UserInstanceHandlerStrategy(InstanceHandlerStrategy):
+
+    '''
+    Implements the InstanceHandlerStrategy to get the User data from the data handler service
+    '''
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -29,6 +33,9 @@ class UserInstanceHandlerStrategy(InstanceHandlerStrategy):
 
 
 class SubscriptionInstanceHandlerStrategy(InstanceHandlerStrategy):
+    '''
+    Implements the InstanceHandlerStrategy to get the subscription data from the data handler service
+    '''
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

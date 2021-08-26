@@ -8,6 +8,10 @@ from celery.exceptions import SoftTimeLimitExceeded
 
 @app.task()
 def consume_mail_notification():
+    '''
+    Gets the notification from the mail topic and performs further operations 
+    :return: None
+    '''
     try:
         consumer = KafkaConsumer(
             'mail',
@@ -27,6 +31,10 @@ def consume_mail_notification():
 
 @app.task()
 def consume_sms_notification():
+    '''
+    Gets the notification from the sms topic and performs further operations 
+    :return: None
+    '''
     try:
         consumer = KafkaConsumer(
             'sms',
@@ -45,6 +53,10 @@ def consume_sms_notification():
 
 @app.task()
 def consume_in_app_notification():
+    '''
+    Gets the notification from the in_app topic and performs further operations 
+    :return: None
+    '''
     try:
         consumer = KafkaConsumer(
             'sms',

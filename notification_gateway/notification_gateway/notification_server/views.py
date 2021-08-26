@@ -8,6 +8,10 @@ from .validation import FieldsValidation
 
 
 class SendMessageToQueue(APIView):
+    '''
+    Serves the notifications from the user by validating and
+    pushing it to the kafka topics.
+    '''
     def post(self, request):
         producer = KafkaProducer(
            value_serializer=lambda m: dumps(m).encode('utf-8'),

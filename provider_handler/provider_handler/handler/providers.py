@@ -3,6 +3,9 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 
 
+# This file is dedicated to the integration with the providers
+# Uses Factory Pattern for eaiser integration with other providers.
+
 class NotificationProvider(object):
     def get_provider_instance(self, m, type):
         npi = NotificationProviderFactory()

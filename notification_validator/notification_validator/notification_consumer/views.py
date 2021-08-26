@@ -13,11 +13,18 @@ from notification_validator.notifications.models import Notification
 logger = logging.getLogger()
 
 
+# saves the data to the database
 def persist_data(users, message, provider, ttl=1):
     Notification.objects.create(users=users, message=message, provider=provider, time_to_live=ttl)
 
 
 def push_in_provider_topic(users, message, provider):
+    '''
+    sends the processed data to the kafka topic.
+    :param users: list
+    :param message: json
+    :param provider: string
+    '''
     producer = KafkaProducer(
         value_serializer=lambda m: dumps(m).encode('utf-8'),
         bootstrap_servers=settings.BOOTSTRAP_SERVERS_PRODUCERS)
@@ -28,7 +35,12 @@ def push_in_provider_topic(users, message, provider):
 
 
 def fetch_user_objects(instance_handler, data):
-    print(data)
+    '''
+    - sends the notification directly or persists it in the database
+    for the worker to process it.
+    :param instance_handler: SubscriptionInstanceHandlerStrategy/UserInstanceHandlerStrategy
+    :param data: json
+    '''
     try:
         users = instance_handler.fetch_instance(data)
         if data["persist"] == True:
@@ -44,6 +56,12 @@ def fetch_user_objects(instance_handler, data):
 
 @app.task()
 def consume_notification():
+    '''
+    - Pulls the request from the kafka topic.
+    - fetches the relevent data required for the processing of notification
+    - processes it based on the type of notification user/subscription
+    :return: Nothing
+    '''
     try:
         consumer = KafkaConsumer(
             'notification',

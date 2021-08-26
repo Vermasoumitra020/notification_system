@@ -13,6 +13,8 @@ class MultiIDsField(forms.Field):
 
 class JsonField(forms.Field):
     def to_python(self, value):
+        """Normalize data to a json as can't be directly handled by forms"""
+        # Return an empty dict if no input was given.
         if not value:
             return {}
         return value
