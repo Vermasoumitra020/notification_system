@@ -58,12 +58,17 @@ Notification Service to handle group and personalized notifications supporting m
   
 ### Docker Run
 
-- **Method 1**
+After making the required changes in settings follow either of the below method to run the services.
+
+- **Method 1: (Run using Script)**
+  - To build the project run script : `./build.sh`
+  - To run all services run script : `./run.sh`
+  - To stop all services run script : `./kill.sh`
+
+- **Method 2: (Run Individually)**
   - To build the project individually : `docker-compose -f local.yml build`
   - Run each service individually by command : `docker-compose -f local.yml up` or `docker-compose -f local.yml up -d` (for backgroud run)
   
-
-
 
 ## Future Improvements
 
