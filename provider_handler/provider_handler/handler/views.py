@@ -9,7 +9,7 @@ from provider_handler.handler.providers import NotificationProvider
 def consume_mail_notification():
     consumer = KafkaConsumer(
         'mail',
-        auto_offset_reset='earliest',
+        auto_offset_reset='latest',
         enable_auto_commit=True,
         value_deserializer=lambda m: loads(m.decode('utf-8')),
         bootstrap_servers=['192.168.0.104:9093'])
@@ -24,7 +24,7 @@ def consume_mail_notification():
 def consume_sms_notification():
     consumer = KafkaConsumer(
         'sms',
-        auto_offset_reset='earliest',
+        auto_offset_reset='latest',
         enable_auto_commit=True,
         value_deserializer=lambda m: loads(m.decode('utf-8')),
         bootstrap_servers=['192.168.0.104:9093'])
@@ -38,7 +38,7 @@ def consume_sms_notification():
 def consume_in_app_notification():
     consumer = KafkaConsumer(
         'sms',
-        auto_offset_reset='earliest',
+        auto_offset_reset='latest',
         enable_auto_commit=True,
         value_deserializer=lambda m: loads(m.decode('utf-8')),
         bootstrap_servers=['192.168.0.104:9093'])

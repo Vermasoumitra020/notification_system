@@ -45,7 +45,7 @@ def fetch_user_objects(instance_handler, data):
 def consume_notification():
     consumer = KafkaConsumer(
         'notification',
-        auto_offset_reset='earliest',
+        auto_offset_reset='latest',
         enable_auto_commit=True,
         value_deserializer=lambda m: loads(m.decode('utf-8')),
         bootstrap_servers=settings.BOOTSTRAP_SERVERS_CONSUMER)
