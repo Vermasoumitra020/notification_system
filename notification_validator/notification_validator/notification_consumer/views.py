@@ -3,6 +3,7 @@ import concurrent.futures
 from kafka import KafkaConsumer, KafkaProducer
 from json import loads, dumps
 from config.celery_app import app
+from celery.exceptions import SoftTimeLimitExceeded
 import logging
 
 from notification_validator.notification_consumer.handler.instance_handler import SubscriptionInstanceHandlerStrategy, \
@@ -43,29 +44,35 @@ def fetch_user_objects(instance_handler, data):
 
 @app.task()
 def consume_notification():
-    consumer = KafkaConsumer(
-        'notification',
-        auto_offset_reset='latest',
-        enable_auto_commit=True,
-        value_deserializer=lambda m: loads(m.decode('utf-8')),
-        bootstrap_servers=settings.BOOTSTRAP_SERVERS_CONSUMER)
+    try:
+        consumer = KafkaConsumer(
+            'notification',
+            auto_offset_reset='latest',
+            enable_auto_commit=True,
+            value_deserializer=lambda m: loads(m.decode('utf-8')),
+            bootstrap_servers=settings.BOOTSTRAP_SERVERS_CONSUMER)
 
-    subscription_url = f"http://{settings.BASE_DATA_SERVICE_URL}/api/v1/subscription/get-subscribed-users/"
-    user_url = f"http://{settings.BASE_DATA_SERVICE_URL}/api/v1/users/get-user-details/"
+        subscription_url = f"http://{settings.BASE_DATA_SERVICE_URL}/api/v1/subscription/get-subscribed-users/"
+        user_url = f"http://{settings.BASE_DATA_SERVICE_URL}/api/v1/users/get-user-details/"
 
-    subscription_instance_handler = SubscriptionInstanceHandlerStrategy(subscription_url)
-    user_instance_handler = UserInstanceHandlerStrategy(user_url)
+        subscription_instance_handler = SubscriptionInstanceHandlerStrategy(subscription_url)
+        user_instance_handler = UserInstanceHandlerStrategy(user_url)
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
-        futures = []
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+            futures = []
 
-        for data in consumer:
-            if data["type"] == "subscription":
-                futures.append(executor.submit(fetch_user_objects, instance_handler=subscription_instance_handler, data=data))
-            else:
-                futures.append(executor.submit(fetch_user_objects, instance_handler=user_instance_handler, data=data))
-        for future in concurrent.futures.as_completed(futures):
-            print(future.result())
+            for data in consumer:
+                data = data.value
+                if data["type"] == "subscription":
+                    futures.append(executor.submit(fetch_user_objects, instance_handler=subscription_instance_handler, data=data))
+                else:
+                    futures.append(executor.submit(fetch_user_objects, instance_handler=user_instance_handler, data=data))
+            for future in concurrent.futures.as_completed(futures):
+                print(future.result())
+
+    except SoftTimeLimitExceeded:
+        print("Restarting...")
+
 
 
 consume_notification.delay()

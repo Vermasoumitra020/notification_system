@@ -16,17 +16,11 @@ docker-compose -f notification_gateway/local.yml up -d
 echo "[INFO] Notification Gateway Service run successfully"
 
 # run docker of notification validator service
-echo "[INFO] Starting Notification Gateway Service..."
+echo "[INFO] Starting Notification Validator Service..."
 docker-compose -f notification_validator/local.yml up -d
-echo "[INFO] Notification Gateway Service run successfully"
+echo "[INFO] Notification Validator Service run successfully"
 
 # run docker of provider handler
 echo "[INFO] Starting Provider Handler Service..."
 docker-compose -f provider_handler/local.yml up -d
 echo "[INFO] Provider Handler Service run successfully"
-
-
-if [[ $1 == 'setup' ]]
-then
-  exec ./setup.sh
-fi

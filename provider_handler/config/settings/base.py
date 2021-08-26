@@ -308,11 +308,13 @@ CORS_URLS_REGEX = r"^/api/.*$"
 # Your stuff...
 # ------------------------------------------------------------------------------
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-DEFAULT_FROM_EMAIL = 'soniharsh020@gmail.com'
-SERVER_EMAIL = 'soniharsh020@gmail.com'
+DEFAULT_FROM_EMAIL = ''
+SERVER_EMAIL = ''
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'soniharsh020@gmail.com'
-EMAIL_HOST_PASSWORD = 'Vermaraj020_*'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 
+# Kafka Settings
+BOOTSTRAP_SERVER_CONSUMER=['192.168.0.105:9093']

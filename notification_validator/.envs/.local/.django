@@ -14,4 +14,4 @@ CELERY_FLOWER_USER=debug
 CELERY_FLOWER_PASSWORD=debug
 
 # ------------------------------------------------------------------------------
-BASE_DATA_SERVICE_URL=192.168.0.105:8000
+BASE_DATA_SERVICE_URL=192.168.0.105:8002

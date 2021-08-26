@@ -3,49 +3,63 @@ from kafka import KafkaConsumer
 from json import loads
 from config.celery_app import app
 from provider_handler.handler.providers import NotificationProvider
+from django.conf import settings
+from celery.exceptions import SoftTimeLimitExceeded
 
-
-@app.task(time_limit=100000)
+@app.task()
 def consume_mail_notification():
-    consumer = KafkaConsumer(
-        'mail',
-        auto_offset_reset='latest',
-        enable_auto_commit=True,
-        value_deserializer=lambda m: loads(m.decode('utf-8')),
-        bootstrap_servers=['192.168.0.104:9093'])
+    try:
+        consumer = KafkaConsumer(
+            'mail',
+            auto_offset_reset='latest',
+            enable_auto_commit=True,
+            value_deserializer=lambda m: loads(m.decode('utf-8')),
+            bootstrap_servers=settings.BOOTSTRAP_SERVER_CONSUMER)
 
-    notify = NotificationProvider()
-    for m in consumer:
-        print(m.value)
-        notify.get_provider_instance(m.value, "mail")
+        notify = NotificationProvider()
+        for m in consumer:
+            print(m.value)
+            notify.get_provider_instance(m.value, "mail")
+
+    except SoftTimeLimitExceeded:
+        print("Restarting...")
 
 
-@app.task(time_limit=100000)
+@app.task()
 def consume_sms_notification():
-    consumer = KafkaConsumer(
-        'sms',
-        auto_offset_reset='latest',
-        enable_auto_commit=True,
-        value_deserializer=lambda m: loads(m.decode('utf-8')),
-        bootstrap_servers=['192.168.0.104:9093'])
+    try:
+        consumer = KafkaConsumer(
+            'sms',
+            auto_offset_reset='latest',
+            enable_auto_commit=True,
+            value_deserializer=lambda m: loads(m.decode('utf-8')),
+            bootstrap_servers=settings.BOOTSTRAP_SERVER_CONSUMER)
 
-    notify = NotificationProvider()
-    for m in consumer:
-        notify.get_provider_instance(m.value, "mail")
+        notify = NotificationProvider()
+        for m in consumer:
+            notify.get_provider_instance(m.value, "mail")
+
+    except SoftTimeLimitExceeded:
+        print("Restarting...")
 
 
-@app.task(time_limit=100000)
+@app.task()
 def consume_in_app_notification():
-    consumer = KafkaConsumer(
-        'sms',
-        auto_offset_reset='latest',
-        enable_auto_commit=True,
-        value_deserializer=lambda m: loads(m.decode('utf-8')),
-        bootstrap_servers=['192.168.0.104:9093'])
+    try:
+        consumer = KafkaConsumer(
+            'sms',
+            auto_offset_reset='latest',
+            enable_auto_commit=True,
+            value_deserializer=lambda m: loads(m.decode('utf-8')),
+            bootstrap_servers=settings.BOOTSTRAP_SERVER_CONSUMER)
 
-    notify = NotificationProvider()
-    for m in consumer:
-        notify.get_provider_instance(m.value, "mail")
+        notify = NotificationProvider()
+        for m in consumer:
+            notify.get_provider_instance(m.value, "mail")
+
+    except SoftTimeLimitExceeded:
+        print("Restarting...")
+
 
 
 consume_mail_notification.delay()

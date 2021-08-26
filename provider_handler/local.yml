@@ -19,7 +19,7 @@ services:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
     ports:
-      - "8004:8000"
+      - "8003:8000"
     command: /start
 
   postgres:
@@ -47,7 +47,7 @@ services:
       - ./config:/app/config:z
       - ./provider_handler:/app/provider_handler:z
     ports:
-      - "7004:7000"
+      - "7003:7000"
     command: /start-docs
 
   redis:
