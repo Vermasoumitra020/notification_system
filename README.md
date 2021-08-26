@@ -10,23 +10,23 @@ Notification Service to handle group and personalized notifications supporting m
   - Serves notifications to Kafka(Message Queue) for asynchronous notification handeling.
   - Provides initial basic validations to the requests being forwarded.
   
-  [Read more](https://github.com/Vermasoumitra020/notification_system/blob/master/notification_gateway/README.rst)
+  [Read more](https://github.com/Vermasoumitra020/notification_system/blob/master/notification_gateway/README.md)
  
 - **Notification Validator**
   - Pulls the notification from kafka and gets the user realted informations necessary for sending notifications.
   - Schedules the notifications and pushes the notifications to kafka.
   
-  [Read more](https://github.com/Vermasoumitra020/notification_system/blob/master/notification_validator/README.rst)
+  [Read more](https://github.com/Vermasoumitra020/notification_system/blob/master/notification_validator/README.md)
   
 - **Notification Data Handler**
   - Exposes APIs to register, subscrbe and fetch users and subscription details.
   
-  [Read more](https://github.com/Vermasoumitra020/notification_system/blob/master/notification_data_handler/README.rst)
+  [Read more](https://github.com/Vermasoumitra020/notification_system/blob/master/notification_data_handler/README.md)
   
 - **Provider Handler**
   - Pulls the notifications from the different topics in kafka and sends it to different provider handlers.
   
-  [Read more](https://github.com/Vermasoumitra020/notification_system/blob/master/provider_handler/README.rst)
+  [Read more](https://github.com/Vermasoumitra020/notification_system/blob/master/provider_handler/README.md)
   
 - **Kafka Docker**
   - Docker compose file for kafka settings.
